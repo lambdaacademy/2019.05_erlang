@@ -1,0 +1,5 @@
+-name {{node_name}}
+
+## Cookie for distributed erlang
+-setcookie conway_game
+
