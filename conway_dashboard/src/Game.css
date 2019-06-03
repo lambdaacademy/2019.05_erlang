@@ -1,0 +1,89 @@
+.Board {
+  position: relative;
+  margin: 0 auto;
+  background-color: #000;
+  background-image:
+    linear-gradient(#333 1px, transparent 1px),
+    linear-gradient(90deg, #333 1px, transparent 1px);
+}
+
+.Cell {
+  background: #ccc;
+  position: absolute;
+}
+
+.Button {
+    position: relative;
+    top: 40px; left: 0px;
+
+}
+
+
+h1 {
+    margin-bottom: 5%
+}
+
+h3 {
+    text-align: left;
+    margin-top: 3%;
+}
+
+.dashboard-items h2 {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.dashboard {
+    margin-top: 5%
+}
+
+.dashboard-inside {
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.Form {
+    text-align: left;
+    padding: 5%;
+}
+
+.formDiv {
+    width: 20%;
+    line-height: 2.0
+}
+
+.statsDiv:not(h3) {
+    font-size: 30px;
+    text-align: left;
+}
+
+.list-group-item {
+    isplay:block;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+}
+
+.list-group-item {
+    padding: 3px 10px
+}
+
+.div {
+    padding: 10%;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.div:has(h3) {
+    text-align: center;
+}
+
+.spinner-box {
+    padding: 10%;
+}
+
+.dashboard-title-div {
+    text-align: center;
+}
