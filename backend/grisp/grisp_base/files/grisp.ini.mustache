@@ -1,0 +1,11 @@
+[boot]
+image_path = /media/mmcsd-0-0/conway_game/erts-10.0/bin/beam.bin
+
+[erlang]
+args = erl.rtems -- -home . -pa . -root conway_game -boot conway_game/releases/0.1.0/conway_game -internal_epmd epmd_sup -kernel inetrc "./erl_inetrc" -sname slave -setcookie conway_game
+
+[network]
+ip_self = dhcp
+wlan = enable
+hostname = boardX
+wpa = wpa_supplicant.conf
