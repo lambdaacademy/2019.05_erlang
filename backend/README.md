@@ -4,8 +4,10 @@ This is a project for 2019 edition of School of Erlang.
 ## Manual
 
 - Modify master_vars.config/slave_vars.config (replace `host` with your IP address)
-- Add to src/conway_game.app.src the master node name
-- Default number of slaves is 1, you can change it by modifying src/conway_game.app.src 
+
+The following configuration parameters must be specified in `src/conway_game.app.src`
+- `masternode` - master node name (replace `host` with your IP address);
+- `slaves_n` - default is 1. 
 
 ### Master
 ```
@@ -20,3 +22,7 @@ _build/master/rel/conway_game/bin/conway_game console
 
 _build/slave/rel/conway_game/bin/conway_game console
 ```
+
+#### Adding more slaves
+
+Each slave should have a unique node name (`slave_vars.config` needs to be modified accordingly).
