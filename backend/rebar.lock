@@ -1,0 +1,26 @@
+{"1.1.0",
+[{<<"cowboy">>,
+  {git,"git://github.com/ninenines/cowboy.git",
+       {ref,"d846827b2a70317914621328bd617e4e5d4d13d8"}},
+  0},
+ {<<"cowlib">>,
+  {git,"https://github.com/ninenines/cowlib",
+       {ref,"75aaeb8415033b07303febbfeba66d6d3413ad06"}},
+  1},
+ {<<"epmd">>,
+  {git,"https://github.com/erlang/epmd",
+       {ref,"4d1a595b9d5c32fc0e55f462da381de62de23bf0"}},
+  0},
+ {<<"grisp">>,{pkg,<<"grisp">>,<<"1.1.4">>},0},
+ {<<"jiffy">>,{pkg,<<"jiffy">>,<<"0.15.2">>},0},
+ {<<"mapz">>,{pkg,<<"mapz">>,<<"0.3.0">>},1},
+ {<<"ranch">>,
+  {git,"https://github.com/ninenines/ranch",
+       {ref,"3190aef88aea04d6dce8545fe9b4574288903f44"}},
+  1}]}.
+[
+{pkg_hash,[
+ {<<"grisp">>, <<"5C22D6F9C0B47A90F132E56AC9D85659B5AC469BAF04B4C98EE1E0EF5894319B">>},
+ {<<"jiffy">>, <<"DE266C390111FD4EA28B9302F0BC3D7472468F3B8E0ACEABFBEFA26D08CD73B7">>},
+ {<<"mapz">>, <<"438D24746CE5A252101E00B2032EFDF7FC69EB32689D3B805DE5E6DD7F52614F">>}]}
+].

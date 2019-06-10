@@ -102,7 +102,9 @@ handle_cast({update, NodeName, Rect, G}, #state{state = computing,
             {noreply, State#state{current_rects = NewCurrentRects}}
     end;
 handle_cast(M, S) ->
-    io:format("[WARN] Unknown cast: ~p in state ~p~n", [M, S]),
+    io:format("[WARN] Unknown cast: ~p ~n", [M]),
+    io:format("[WARN] in state ~p~n", [S]),
+    io:format("[WARN] State: ~p ~n", [S#state.state]),
     {noreply, S}.
 
 handle_info({'DOWN', Ref, _, _, Reason} = M, S) ->
@@ -116,7 +118,7 @@ handle_info(_, S) ->
 noderef() ->
     {ok, NodeName} = application:get_env(conway_game, masterhost),
     {?MODULE, NodeName}.
-    
+
 inc_generation(#state{goal_generations = N, generation = M} = State) when N == M ->
     NewState = State#state{state = finished, generation = M},
     ws_h:update_state(format_state(NewState)),
