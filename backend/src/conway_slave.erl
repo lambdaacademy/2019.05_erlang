@@ -65,8 +65,8 @@ handle_cast({tick}, State) ->
     % TODO: Pattern match
     NewGen = State#state.current_gen + 1,
 
-    %Fields = rect:map(fun(x, y, value) -> update_cell(x, y, value, State#state.rect) end, State#state.rect),
-    NewRect = rect:map(fun update_cell/3, State#state.rect),
+    NewRect = rect:map(fun(X, Y, Value) -> update_cell(X, Y, Value, State#state.rect) end, State#state.rect),
+    %NewRect = rect:map(fun update_cell/3, State#state.rect),
     %NewRect = map:put(fields, Fields, State#state.rect),
 
     NewState = State#state{
@@ -78,12 +78,12 @@ handle_cast({tick}, State) ->
         NewState#state.rect,
         NewState#state.current_gen),
 
-    io:format("Tick: Generation ~p ~n", [current_gen]),
+    io:format("Tick: Generation ~p ~n", [NewGen]),
 
-    timer:sleep(500),
+    timer:sleep(300),
     gen_server:cast({?MODULE, State#state.node_name}, {tick}),
 
-    {noreply, State};
+    {noreply, NewState};
 
 handle_cast(_Msg, State) ->
     {noreply, State}.
@@ -99,5 +99,26 @@ code_change(_OldVsn, State, _Extra) ->
 
 %%% Internal functions
 
-update_cell(X, Y, _Value) ->
-    {{X, Y}, true}.
+update_cell(X, Y, Value, Rect) ->
+    Neighbours = [
+        rect:get(Rect, {X-1, Y-1}),
+        rect:get(Rect, {X, Y-1}),
+        rect:get(Rect, {X+1, Y-1}),
+        rect:get(Rect, {X-1, Y}),
+        rect:get(Rect, {X+1, Y}),
+        rect:get(Rect, {X-1, Y+1}),
+        rect:get(Rect, {X, Y+1}),
+        rect:get(Rect, {X+1, Y+1})
+    ],
+    Count = length(lists:filter(fun(Value) ->
+            case Value of
+                true -> true;
+                _ -> false
+            end
+        end, Neighbours)),
+    NewValue = case {Count, Value} of
+        {2, true} -> true;
+        {3, _} -> true;
+        _ -> false
+    end,
+    {{X, Y}, NewValue}.
