@@ -7,9 +7,10 @@
 -export([to_json/2]).
 
 init(Req, Opts) ->
-	{cowboy_rest, Req, Opts}.
+    ReqWithCORS = add_cors_headers(Req),
+    {cowboy_rest, ReqWithCORS, Opts}.
 
-allowed_methods(Req, State) -> {[<<"POST">>, <<"GET">>], Req, State}.
+allowed_methods(Req, State) -> {[<<"POST">>, <<"GET">>, <<"OPTIONS">>], Req, State}.
 
 content_types_provided(Req, State) ->
 	{[
@@ -26,7 +27,9 @@ to_json(Req, State) ->
         <<"POST">> ->
             start_the_game(Req, State);
         <<"GET">> ->
-            get_state(Req, State)
+            get_state(Req, State);
+        <<"OPTIONS">> ->
+            {true, Req, State}
     end.
 
 start_the_game(Req, State) ->
@@ -67,6 +70,10 @@ to_int(B) when is_list(B) ->
     list_to_integer(B).
 
 %% Helpers
+
+add_cors_headers(Req) ->
+    Req1 = cowboy_req:set_resp_header(<<"access-control-allow-origin">>, <<"*">>, Req),
+    cowboy_req:set_resp_header(<<"access-control-allow-headers">>, <<"Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With">>, Req1).
 
 is_master_node_started() ->
     case maps:get(start_state, conway_master_worker:get_state()) of
