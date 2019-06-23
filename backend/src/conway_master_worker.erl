@@ -47,6 +47,7 @@ reset_state() -> gen_server:call(noderef(), reset_state).
 get_state_raw() -> gen_server:call(noderef(), get_state_raw).
 
 init([SlaveN]) ->
+    io:format("Master node ~p~n", [node()]),
     {ok, #state{max_slaves = SlaveN, started = true}}.
 
 handle_call(reset_state, _, #state{ max_slaves = MaxSl }) ->

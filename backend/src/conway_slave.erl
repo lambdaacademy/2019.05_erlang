@@ -44,8 +44,8 @@ init_state(Node, StartingRect, Gens, _Slaves, _W) ->
 %%% gen_server callbacks
 
 init([]) ->
-    io:format("Slave initialized~n", []),
-    conway_master_worker:register_slave(node()),
+    io:format("Slave initialized~p~n", [node()]),
+    % conway_master_worker:register_slave(node()),
 
     {ok, #state{}}.
 
