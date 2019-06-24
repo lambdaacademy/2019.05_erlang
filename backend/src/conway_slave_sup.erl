@@ -31,5 +31,5 @@ start_link() ->
 %% Before OTP 18 tuples must be used to specify a child. e.g.
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
-    ConwayWorker = #{id => conway_slave, start => {conway_slave, loop, []}},
+    ConwayWorker = #{id => conway_slave, start => {conway_slave, start_link, []}},
     {ok, { {one_for_all, 0, 1}, [ConwayWorker]} }.

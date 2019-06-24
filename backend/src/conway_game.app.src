@@ -10,7 +10,7 @@
     jiffy,
     runtime_tools
    ]},
-  {env,[ {masterhost, 'master@host'},
+  {env,[ {masterhost, 'master@mainframe1'},
          {slave_n, 1}]},
   {modules, []},
 

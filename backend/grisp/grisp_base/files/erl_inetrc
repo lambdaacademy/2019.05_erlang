@@ -1,5 +1,5 @@
 % Add hosts
-{host, {X,X,X,X}, ["hostname"]}.
+{host, {10,152,0,13}, ["mainframe1"]}.
 
 % Do not monitor the hosts file
 {hosts_file, ""}.
