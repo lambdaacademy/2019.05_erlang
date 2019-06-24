@@ -44,81 +44,82 @@ init_state(Node, StartingRect, Gens, _Slaves, _W) ->
 %%% gen_server callbacks
 
 init([]) ->
-    io:format("Slave initialized~p~n", [node()]),
-    % conway_master_worker:register_slave(node()),
+  io:format("Slave initialized~p~n", [node()]),
+  conway_master_worker:register_slave(node()),
 
-    {ok, #state{}}.
+  {ok, #state{}}.
 
 handle_call({init_state, NodeName, StartingRect, Gens}, _From, State) ->
-    Rect = [],
-    NewState = #state{
-        rect = StartingRect,
-        current_gen = 0,
-        max_gen = Gens,
-        node_name = NodeName
-    },
-    {reply, ok, NewState}.
+  Rect = [],
+  NewState = #state{
+    rect = StartingRect,
+    current_gen = 0,
+    max_gen = Gens,
+    node_name = NodeName
+  },
+  {reply, ok, NewState}.
 
 handle_cast({tick}, #state{max_gen = MaxGen, current_gen = CurrentGen} = State) when CurrentGen >= MaxGen ->
-    {noreply, State};
+  {noreply, State};
+
 handle_cast({tick}, State) ->
-    % TODO: Pattern match
-    NewGen = State#state.current_gen + 1,
+  NewGen = State#state.current_gen + 1,
 
-    NewRect = rect:map(fun(X, Y, Value) -> update_cell(X, Y, Value, State#state.rect) end, State#state.rect),
-    %NewRect = rect:map(fun update_cell/3, State#state.rect),
-    %NewRect = map:put(fields, Fields, State#state.rect),
+  NewRect = rect:map(fun(X, Y, Value) -> update_cell(X, Y, Value, State#state.rect) end, State#state.rect),
 
-    NewState = State#state{
-        current_gen = NewGen,
-        rect = NewRect},
+  NewState = State#state{
+    current_gen = NewGen,
+    rect = NewRect},
 
-    conway_master_worker:update_state(
-        NewState#state.node_name,
-        NewState#state.rect,
-        NewState#state.current_gen),
+  conway_master_worker:update_state(
+    NewState#state.node_name,
+    NewState#state.rect,
+    NewState#state.current_gen),
 
-    io:format("Tick: Generation ~p ~n", [NewGen]),
+  io:format("Tick: Generation ~p ~n", [NewGen]),
 
-    timer:sleep(300),
-    gen_server:cast({?MODULE, State#state.node_name}, {tick}),
+  timer:sleep(300),
+  gen_server:cast({?MODULE, State#state.node_name}, {tick}),
 
-    {noreply, NewState};
+  {noreply, NewState};
 
 handle_cast(_Msg, State) ->
-    {noreply, State}.
+  {noreply, State}.
 
 handle_info(_Info, State) ->
-    {noreply, State}.
+  {noreply, State}.
 
 terminate(_Reason, _State) ->
-    ok.
+  ok.
 
 code_change(_OldVsn, State, _Extra) ->
-        {ok, State}.
+  {ok, State}.
 
 %%% Internal functions
 
 update_cell(X, Y, Value, Rect) ->
-    Neighbours = [
-        rect:get(Rect, {X-1, Y-1}),
-        rect:get(Rect, {X, Y-1}),
-        rect:get(Rect, {X+1, Y-1}),
-        rect:get(Rect, {X-1, Y}),
-        rect:get(Rect, {X+1, Y}),
-        rect:get(Rect, {X-1, Y+1}),
-        rect:get(Rect, {X, Y+1}),
-        rect:get(Rect, {X+1, Y+1})
-    ],
-    Count = length(lists:filter(fun(Value) ->
-            case Value of
-                true -> true;
-                _ -> false
-            end
-        end, Neighbours)),
-    NewValue = case {Count, Value} of
-        {2, true} -> true;
-        {3, _} -> true;
-        _ -> false
-    end,
-    {{X, Y}, NewValue}.
+  Neighbours = [
+    rect:get(Rect, {X-1, Y-1}),
+    rect:get(Rect, {X, Y-1}),
+    rect:get(Rect, {X+1, Y-1}),
+    rect:get(Rect, {X-1, Y}),
+    rect:get(Rect, {X+1, Y}),
+    rect:get(Rect, {X-1, Y+1}),
+    rect:get(Rect, {X, Y+1}),
+    rect:get(Rect, {X+1, Y+1})
+  ],
+
+  Count = length(lists:filter(fun(Value) ->
+    case Value of
+      true -> true;
+      _ -> false
+    end
+  end, Neighbours)),
+
+  NewValue = case {Count, Value} of
+    {2, true} -> true;
+    {3, _} -> true;
+    _ -> false
+  end,
+
+  {{X, Y}, NewValue}.
